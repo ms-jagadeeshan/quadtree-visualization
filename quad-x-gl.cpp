@@ -7,7 +7,8 @@
 
 const int WIDTH = 1024;
 const int HEIGHT = 1024;
-const int BOX_SIZE = 10;
+const int BOX_SIZE = 3;
+const int HALF_BOX_SIZE = BOX_SIZE / 2;
 bool displayQuadtreeFlag = false;
 Quad quadtree(Point(0, 0), Point(WIDTH, HEIGHT));
 
@@ -21,12 +22,13 @@ void drawBox(Point p, Color c = Color(0.0f, 0.f, 0.0f))
 {
     std::cout << "Drawing box over " << p.x << " " << p.y << std::endl;
     glColor3f(c.r, c.g, c.b);
-    glRecti(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, p.x + BOX_SIZE / 2, p.y + BOX_SIZE / 2);
+    glRecti(p.x - HALF_BOX_SIZE, p.y - HALF_BOX_SIZE, p.x + HALF_BOX_SIZE, p.y + HALF_BOX_SIZE);
     glFlush();
 }
 
 void insert2qt(Point p)
 {
+    // std::cout << "insertqt" << p.x << p.y << std::endl;
     auto node = std::make_shared<Node>(p, 1);
     quadtree.insert(node);
 }
@@ -86,8 +88,8 @@ void draw_and_update(int x, int y)
     Point p = display2glPoint(x, y);
     drawBox(p);
 
-    for (int i = -5; i <= 5; i++)
-        for (int j = -5; j <= 5; j++)
+    for (int i = -HALF_BOX_SIZE; i <= HALF_BOX_SIZE; i++)
+        for (int j = -HALF_BOX_SIZE; j <= HALF_BOX_SIZE; j++)
             insert2qt(p + Point(i, j));
 }
 
